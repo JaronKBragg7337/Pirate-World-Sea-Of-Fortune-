@@ -68,6 +68,11 @@ export class InputHandler {
   }
 
   private onTouchStart(e: TouchEvent) {
+    // Don't block taps on UI buttons/links — only prevent default on game canvas
+    const target = e.target as HTMLElement;
+    if (target.closest('button, a, [role="button"], .pointer-events-auto')) {
+      return; // Let the browser handle the tap as a click
+    }
     e.preventDefault();
     const touch = e.touches[0];
     this.touchStart = { x: touch.clientX, y: touch.clientY };
@@ -76,6 +81,10 @@ export class InputHandler {
   }
 
   private onTouchMove(e: TouchEvent) {
+    const target = e.target as HTMLElement;
+    if (target.closest('button, a, [role="button"], .pointer-events-auto')) {
+      return;
+    }
     e.preventDefault();
     const touch = e.touches[0];
     if (this.touchCurrent && this.touchStart) {
