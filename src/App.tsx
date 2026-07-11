@@ -15,6 +15,10 @@ export default function App() {
   const [screen, setScreen] = useState<GameScreen>('menu');
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [showCrew, setShowCrew] = useState(false);
+  const [nearStation, setNearStation] = useState<{ id: string; label: string } | null>(null);
+  const [controllingShip, setControllingShip] = useState(false);
+  const [activeDamage, setActiveDamage] = useState(0);
+  const [flooding, setFlooding] = useState(0);
   const gameRef = useRef<Game | null>(null);
 
   const handleGameReady = useCallback((game: Game) => {
@@ -22,8 +26,17 @@ export default function App() {
     game.setOnStateChange((state) => {
       setGameState(state);
     });
-    // Get initial state
     setGameState(game.getState());
+
+    // Poll character gameplay state
+    const interval = setInterval(() => {
+      if (!gameRef.current) return;
+      setNearStation(gameRef.current.getNearStation());
+      setControllingShip(gameRef.current.isControllingShip());
+      setActiveDamage(gameRef.current.getActiveDamageCount());
+      setFlooding(gameRef.current.getFloodingLevel());
+    }, 200);
+    return () => clearInterval(interval);
   }, []);
 
   const handlePlay = useCallback(() => {
@@ -180,8 +193,11 @@ export default function App() {
           <HUD
             gameState={gameState}
             onToggleCrew={handleToggleCrew}
-            onToggleMap={() => {}}
             onPause={handlePause}
+            nearStation={nearStation}
+            controllingShip={controllingShip}
+            activeDamageCount={activeDamage}
+            floodingLevel={flooding}
           />
 
           {/* Mobile touch controls */}
