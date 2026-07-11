@@ -1,73 +1,102 @@
-# React + TypeScript + Vite
+# Pirate World: Seas of Fortune
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A 3D open-world pirate naval combat game built with Three.js, React, TypeScript, and Supabase. Inspired by Sea of Thieves and Pirates of the Caribbean. Sail the Caribbean, command your crew, engage in naval battles, and build your pirate empire.
 
-Currently, two official plugins are available:
+## Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Game**: [Deployed via Vercel](https://your-vercel-url.vercel.app)
+- **Backend**: [Supabase Dashboard](https://supabase.com/dashboard/project/uxyrwbdknvykgvxkigzh)
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Layer | Technology |
+|-------|-----------|
+| Renderer | Three.js (WebGL 2.0) |
+| Frontend | React 18 + TypeScript + Vite |
+| Styling | Tailwind CSS + shadcn/ui |
+| Physics | Cannon.js (buoyancy, ballistics) |
+| Backend | Supabase (Postgres + Realtime + Auth) |
+| Deploy | Vercel |
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **5 Ship Classes**: Sloop, Cutter, Brigantine, Galleon, Man o' War (unlockable)
+- **Crew Management**: Assign crew to Cannons, Repairs, or Sails
+- **Dynamic Wind System**: Sail with the wind for +40% speed boost
+- **Naval Combat**: Broadside cannon combat with physics-driven cannonballs
+- **AI Enemies**: British Patrol, Skeleton Galleons, Merchant vessels
+- **12 Islands**: Procedural world with harbors, docks, and loot
+- **Day/Night Cycle**: Dynamic lighting and ocean reflections
+- **Persistent Progress**: Player data, ships, and scores saved to Supabase
+- **Leaderboard**: Compete for the highest pirate score
+- **Multiplayer Ready**: Session-based multiplayer lobby (in progress)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Controls
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+| Key | Action |
+|-----|--------|
+| W/S | Adjust sails (speed up / slow down) |
+| A/D | Turn ship |
+| Q | Fire left cannons |
+| E | Fire right cannons |
+| C | Open crew panel |
+| F | Go to Harbor |
+| M | Toggle map |
+| Esc | Pause |
+| Mouse Wheel | Zoom camera |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Local Development
+
+```bash
+# Clone
+git clone https://github.com/JaronKBragg7337/Pirate-World-Sea-Of-Fortune-.git
+cd Pirate-World-Sea-Of-Fortune-
+
+# Install
+npm install
+
+# Environment (copy from .env.example)
+cp .env.example .env
+
+# Dev server
+npm run dev
+
+# Build
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Supabase Setup
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Copy `.env.example` to `.env` and fill in your Supabase credentials
+2. The database schema is in `supabase/migrations/001_game_schema.sql`
+3. Tables: `players`, `player_ships`, `crew_members`, `scores`, `game_sessions`, `session_players`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
 ```
+src/
+  game/          # Core game engine (Three.js)
+    Game.ts      # Main game loop & state
+    renderer.ts  # Three.js setup
+    ocean.ts     # Procedural ocean shader
+    ship.ts      # 3D ship models
+    camera.ts    # Camera controller
+    input.ts     # Keyboard/mouse/touch input
+    world.ts     # Islands, loot, environment
+    cannonball.ts# Projectile physics
+    enemy.ts     # AI enemy ships
+    constants.ts # Game config
+  components/    # React UI
+    MainMenu.tsx
+    HUD.tsx
+    CrewPanel.tsx
+    ShipSelect.tsx
+    HarborHub.tsx
+    GameCanvas.tsx
+  types/         # TypeScript types
+  lib/           # Supabase client
+```
+
+## License
+
+Public Domain - Build the future in public.
