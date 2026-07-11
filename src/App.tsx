@@ -8,6 +8,7 @@ import HUD from '@/components/HUD';
 import CrewPanel from '@/components/CrewPanel';
 import ShipSelect from '@/components/ShipSelect';
 import HarborHub from '@/components/HarborHub';
+import MobileControls from '@/components/MobileControls';
 import './App.css';
 
 export default function App() {
@@ -181,6 +182,18 @@ export default function App() {
             onToggleCrew={handleToggleCrew}
             onToggleMap={() => {}}
             onPause={handlePause}
+          />
+
+          {/* Mobile touch controls */}
+          <MobileControls
+            onFireLeft={() => gameRef.current?.fireCannons('left')}
+            onFireRight={() => gameRef.current?.fireCannons('right')}
+            onToggleCrew={handleToggleCrew}
+            onGoHarbor={handleGoToHarbor}
+            onJoystickMove={(x, y) => gameRef.current?.getInput().setMobileJoystick(x, y)}
+            onJoystickEnd={() => gameRef.current?.getInput().clearMobileJoystick()}
+            onSailUp={() => gameRef.current?.getInput().setMobileSailDelta(-0.5)}
+            onSailDown={() => gameRef.current?.getInput().setMobileSailDelta(0.5)}
           />
 
           {/* Harbor quick-access */}

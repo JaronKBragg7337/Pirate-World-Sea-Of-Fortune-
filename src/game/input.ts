@@ -10,6 +10,8 @@ export class InputHandler {
   private touchStart: { x: number; y: number } | null = null;
   private touchCurrent: { x: number; y: number } | null = null;
   private callbacks: Map<string, (() => void)[]> = new Map();
+  private mobileJoystick: { x: number; y: number } | null = null;
+  private mobileSailDelta: number = 0;
 
   constructor() {
     this.onKeyDown = this.onKeyDown.bind(this);
@@ -136,7 +138,28 @@ export class InputHandler {
     return val;
   }
 
-  // Touch
+  // Mobile virtual joystick
+  public setMobileJoystick(x: number, y: number) {
+    this.mobileJoystick = { x, y };
+  }
+  public clearMobileJoystick() {
+    this.mobileJoystick = null;
+  }
+  public getMobileJoystick(): { x: number; y: number } | null {
+    return this.mobileJoystick;
+  }
+
+  // Mobile sail controls
+  public setMobileSailDelta(v: number) {
+    this.mobileSailDelta = v;
+  }
+  public getMobileSailDelta(): number {
+    const v = this.mobileSailDelta;
+    this.mobileSailDelta = 0;
+    return v;
+  }
+
+  // Touch (legacy screen-wide joystick)
   public getTouchJoystick(): { x: number; y: number } | null {
     if (!this.touchStart || !this.touchCurrent) return null;
     const dx = (this.touchCurrent.x - this.touchStart.x) / 100;

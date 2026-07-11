@@ -253,7 +253,7 @@ export class Game {
     }
   }
 
-  private fireCannons(side: 'left' | 'right') {
+  public fireCannons(side: 'left' | 'right') {
     if (!this.isRunning) return;
     const ship = this.state.playerShip;
     if (ship.cannonCooldown > 0) return;
@@ -306,8 +306,21 @@ export class Game {
     if (this.input.isLeft()) turnInput = 1;
     if (this.input.isRight()) turnInput = -1;
 
+    // Mobile virtual joystick (from on-screen controls)
+    const mobileJoy = this.input.getMobileJoystick();
+    if (mobileJoy) {
+      turnInput = -mobileJoy.x; // Left/right steers
+    }
+
+    // Mobile sail controls
+    const sailDelta = this.input.getMobileSailDelta();
+    if (sailDelta !== 0) {
+      ship.sailLevel = Math.max(0, Math.min(1, ship.sailLevel + sailDelta * delta * 2));
+    }
+
+    // Legacy screen-wide touch joystick
     const joystick = this.input.getTouchJoystick();
-    if (joystick) {
+    if (joystick && !mobileJoy) {
       turnInput = -joystick.x;
       if (joystick.y < -0.3) {
         ship.sailLevel = Math.min(1, ship.sailLevel + delta * 0.5);
@@ -409,6 +422,10 @@ export class Game {
 
   public getGoldPopup() {
     return this.goldPopup;
+  }
+
+  public getInput() {
+    return this.input;
   }
 
   public dispose() {
